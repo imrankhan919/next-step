@@ -1,0 +1,19 @@
+{
+  "name": "next-step",
+  "version": "1.0.0",
+  "description": "A full-stack MERN application where students get career guidance from verified counselors, with a real-time chat system, credits economy, and admin control panel.",
+  "license": "ISC",
+  "author": "Imran Khan",
+  "type": "module",
+  "main": "server.js",
+  "scripts": {
+    "server": "node server/server.js",
+    "dev": "node --watch server/server.js"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "mongoose": "^9.7.0"
+  }
+}
