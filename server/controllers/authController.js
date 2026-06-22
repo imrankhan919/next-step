@@ -1,4 +1,5 @@
 import bcrypt from "bcryptjs"
+import jwt from "jsonwebtoken"
 import User from "../models/userModel.js"
 
 const registerUser = async (req, res) => {
@@ -47,7 +48,19 @@ const registerUser = async (req, res) => {
         throw new Error('User not created!')
     }
 
-    res.status(201).json(user)
+    res.status(201).json({
+        _id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        userType: user.userType,
+        location: user.location,
+        qulaification: user.qualification,
+        credits: user.credits,
+        isActive: user.isActive,
+        userSince: user.createdAt,
+        token: generateToken(user._id)
+    })
 
 }
 
@@ -63,7 +76,19 @@ const loginUser = async (req, res) => {
     const user = await User.findOne({ email })
 
     if (user && bcrypt.compareSync(password, user.password)) {
-        res.status(200).json(user)
+        res.status(201).json({
+            _id: user._id,
+            name: user.name,
+            email: user.email,
+            phone: user.phone,
+            userType: user.userType,
+            location: user.location,
+            qulaification: user.qualification,
+            credits: user.credits,
+            isActive: user.isActive,
+            userSince: user.createdAt,
+            token: generateToken(user._id)
+        })
     } else {
         res.status(401)
         throw new Error("Invalid Credentials")
@@ -74,10 +99,23 @@ const loginUser = async (req, res) => {
 }
 
 
+const privateController = async (req, res) => {
+    res.json({
+        message: "Request Made By : "
+    })
+}
+
+
+// Generate Token
+const generateToken = (id) => {
+    return jwt.sign({ id }, process.env.JWT_SECRET, { expiresIn: '30d' })
+}
+
 
 const authController = {
     registerUser,
-    loginUser
+    loginUser,
+    privateController
 }
 
 
