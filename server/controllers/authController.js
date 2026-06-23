@@ -101,7 +101,7 @@ const loginUser = async (req, res) => {
 
 const privateController = async (req, res) => {
     res.json({
-        message: "Request Made By : "
+        message: "Request Made By : " + req.user.name
     })
 }
 
