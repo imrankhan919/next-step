@@ -1,5 +1,6 @@
 import Career from "../models/careerModel.js"
 import Category from "../models/categoryModel.js"
+import Counselor from "../models/counselorModel.js"
 import User from "../models/userModel.js"
 
 const getUsers = async (req, res) => {
@@ -45,7 +46,7 @@ const getCategories = async (req, res) => {
         throw new Error("Categories not found!")
     }
 
-    res.status(201).json(categories)
+    res.status(200).json(categories)
 
 }
 
@@ -81,10 +82,39 @@ const createCareer = async (req, res) => {
 
 }
 
+const getCareers = async (req, res) => {
+    const careers = await Career.find().populate('category')
+
+    if (!careers) {
+        res.status(404)
+        throw new Error("No Carrers Found")
+    }
+
+    res.status(200).json(careers)
+
+}
+
+
+const getCounselors = async (req, res) => {
+    const counselors = await Counselor.find().populate('category').populate('user')
+
+    if (!counselors) {
+        res.status(404)
+        throw new Error("Counselors Not Found!")
+    }
+
+
+    res.status(200).json(counselors)
+
+}
+
+
+const updateCounselor = async (req, res) => {
+    res.send("updating counselor")
+}
 
 
 
-
-const adminController = { getUsers, createCategory, getCategories, createCareer }
+const adminController = { getUsers, createCategory, getCategories, createCareer, getCareers, getCounselors, updateCounselor }
 
 export default adminController

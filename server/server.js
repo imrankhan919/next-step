@@ -7,6 +7,7 @@ import colors from "colors"
 import connectDB from "./config/dbConfig.js"
 import authRoutes from "./routes/authRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
+import counselorRoutes from "./routes/counselorRoutes.js"
 import errorHandler from "./middleware/errorHandler.js"
 
 const PORT = process.env.PORT || 5000
@@ -35,6 +36,9 @@ app.use("/api/auth", authRoutes)
 
 // Admin Routes
 app.use("/api/admin", adminRoutes)
+
+// Counselor Route
+app.use("/api/counselor", counselorRoutes)
 
 // Error Handler
 app.use(errorHandler)
