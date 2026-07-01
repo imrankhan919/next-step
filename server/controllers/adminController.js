@@ -110,7 +110,27 @@ const getCounselors = async (req, res) => {
 
 
 const updateCounselor = async (req, res) => {
-    res.send("updating counselor")
+
+    const counselor = await Counselor.findById(req.params.cnid)
+
+    if (!counselor) {
+        res.status(404)
+        throw new Error('Counselor Not Found')
+    }
+
+    const updatedCounselor = await Counselor.findByIdAndUpdate(counselor._id, req.body, { new: true }).populate('user').populate('category')
+
+    if (req.body.status === "accepted") {
+        const updatedUser = await User.findByIdAndUpdate(counselor.user, { userType: "COUNSELOR" }, { new: true })
+    }
+
+    if (!updatedCounselor) {
+        res.status(409)
+        throw new Error("Counselor not updated")
+    }
+
+    res.status(200).json(updatedCounselor)
+
 }
 
 
