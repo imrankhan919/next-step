@@ -23,44 +23,48 @@ const registerUser = async (req, res) => {
     let emailExist = await User.findOne({ email: email })
     let phoneExist = await User.findOne({ phone: phone })
 
-    if (emailExist || phoneExist) {
-        res.status(409)
-        throw new Error('User Already Exist')
-    }
+    // if (emailExist || phoneExist) {
+    //     res.status(409)
+    //     throw new Error('User Already Exist')
+    // }
 
     // Hash Password
-    const salt = bcrypt.genSaltSync(10);
-    const hashedPassword = bcrypt.hashSync(password, salt);
+    // const salt = bcrypt.genSaltSync(10);
+    // const hashedPassword = bcrypt.hashSync(password, salt);
 
 
+    console.log(req.file)
 
-    const user = await User.create({
-        name,
-        email,
-        phone,
-        password: hashedPassword,
-        qualification,
-        location
-    })
 
-    if (!user) {
-        res.status(409)
-        throw new Error('User not created!')
-    }
+    // const user = await User.create({
+    //     name,
+    //     email,
+    //     phone,
+    //     password: hashedPassword,
+    //     qualification,
+    //     location
+    // })
 
-    res.status(201).json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        phone: user.phone,
-        userType: user.userType,
-        location: user.location,
-        qulaification: user.qualification,
-        credits: user.credits,
-        isActive: user.isActive,
-        userSince: user.createdAt,
-        token: generateToken(user._id)
-    })
+    // if (!user) {
+    //     res.status(409)
+    //     throw new Error('User not created!')
+    // }
+
+    // res.status(201).json({
+    //     _id: user._id,
+    //     name: user.name,
+    //     email: user.email,
+    //     phone: user.phone,
+    //     userType: user.userType,
+    //     location: user.location,
+    //     qulaification: user.qualification,
+    //     credits: user.credits,
+    //     isActive: user.isActive,
+    //     userSince: user.createdAt,
+    //     token: generateToken(user._id)
+    // })
+
+    res.send("user registered!")
 
 }
 
