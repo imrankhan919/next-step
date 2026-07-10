@@ -12,6 +12,7 @@ import connectDB from "./config/dbConfig.js"
 import authRoutes from "./routes/authRoutes.js"
 import adminRoutes from "./routes/adminRoutes.js"
 import counselorRoutes from "./routes/counselorRoutes.js"
+import ratingRoutes from "./routes/ratingsRoutes.js"
 import errorHandler from "./middleware/errorHandler.js"
 
 const PORT = process.env.PORT || 5000
@@ -43,6 +44,9 @@ app.use("/api/admin", adminRoutes)
 
 // Counselor Route
 app.use("/api/counselor", counselorRoutes)
+
+app.use("/api/rating", ratingRoutes)
+
 
 // Error Handler
 app.use(errorHandler)
