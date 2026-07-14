@@ -7,6 +7,8 @@ const categorySchema = new mongoose.Schema({
         required: [true, "Please Enter Category Title!"]
     }
 
+}, {
+    timestamps: true
 })
 
 

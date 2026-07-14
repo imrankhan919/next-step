@@ -11,5 +11,7 @@ router.post("/career/:cid", protect.forAdmin, adminController.createCareer)
 router.get("/career", protect.forAdmin, adminController.getCareers)
 router.get("/counselors", protect.forAdmin, adminController.getCounselors)
 router.put("/counselors/:cnid", protect.forAdmin, adminController.updateCounselor)
+router.get("/credits", protect.forAdmin, adminController.getAllCreditRequests)
+router.put("/credits/:rid", protect.forAdmin, adminController.updateCredit)
 
 export default router

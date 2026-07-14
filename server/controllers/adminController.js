@@ -1,6 +1,7 @@
 import Career from "../models/careerModel.js"
 import Category from "../models/categoryModel.js"
 import Counselor from "../models/counselorModel.js"
+import Credit from "../models/creditModel.js"
 import User from "../models/userModel.js"
 
 const getUsers = async (req, res) => {
@@ -133,8 +134,57 @@ const updateCounselor = async (req, res) => {
 
 }
 
+const getAllCreditRequests = async (req, res) => {
+
+    const creditsRequests = await Credit.find().populate('user')
+
+    if (!creditsRequests) {
+        res.status(404)
+        throw new Error("No Credits Requests Found")
+    }
+
+    res.status(200).json(creditsRequests)
+
+}
+
+const updateCredit = async (req, res) => {
+
+    const { status } = req.body
+
+    if (!status) {
+        res.status(409)
+        throw new Error("Please send status")
+    }
+
+    const creditRequest = await Credit.findById(req.params.rid)
+
+    if (!creditRequest) {
+        res.status(404)
+        throw new Error("Credit Request Not Found!")
+    }
+
+    // Update Credits For User
+    const user = await User.findById(creditRequest.user)
+
+    if (!user) {
+        res.status(404)
+        throw new Error("No User Found!")
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(user._id, { credits: user.credits + creditRequest.credits }, { new: true })
+
+    // Update Status
+    const updatedCreditRequest = await Credit.findByIdAndUpdate(creditRequest._id, { status }, { new: true })
 
 
-const adminController = { getUsers, createCategory, getCategories, createCareer, getCareers, getCounselors, updateCounselor }
+
+    res.status(200).json(updatedCreditRequest)
+
+
+}
+
+
+
+const adminController = { getUsers, createCategory, getCategories, createCareer, getCareers, getCounselors, updateCounselor, getAllCreditRequests, updateCredit }
 
 export default adminController

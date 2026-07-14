@@ -14,6 +14,7 @@ import adminRoutes from "./routes/adminRoutes.js"
 import counselorRoutes from "./routes/counselorRoutes.js"
 import ratingRoutes from "./routes/ratingsRoutes.js"
 import errorHandler from "./middleware/errorHandler.js"
+import creditRoutes from "./routes/creditRoutes.js"
 
 const PORT = process.env.PORT || 5000
 
@@ -45,8 +46,11 @@ app.use("/api/admin", adminRoutes)
 // Counselor Route
 app.use("/api/counselor", counselorRoutes)
 
+// Rating Routes
 app.use("/api/rating", ratingRoutes)
 
+// Credit Routes
+app.use("/api/credit", creditRoutes)
 
 // Error Handler
 app.use(errorHandler)

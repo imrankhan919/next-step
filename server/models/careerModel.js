@@ -26,6 +26,8 @@ const careerSchema = new mongoose.Schema({
         type: String,
         required: [true, "Please Enter Career Title!"]
     }
+}, {
+    timestamps: true
 })
 
 
