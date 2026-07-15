@@ -15,6 +15,7 @@ import counselorRoutes from "./routes/counselorRoutes.js"
 import ratingRoutes from "./routes/ratingsRoutes.js"
 import errorHandler from "./middleware/errorHandler.js"
 import creditRoutes from "./routes/creditRoutes.js"
+import aiRoutes from "./routes/roadmapRoutes.js"
 
 const PORT = process.env.PORT || 5000
 
@@ -39,7 +40,6 @@ app.get("/", (req, res) => {
 // Auth Routes
 app.use("/api/auth", authRoutes)
 
-
 // Admin Routes
 app.use("/api/admin", adminRoutes)
 
@@ -51,6 +51,9 @@ app.use("/api/rating", ratingRoutes)
 
 // Credit Routes
 app.use("/api/credit", creditRoutes)
+
+// A.I Routes
+app.use("/api/ai", aiRoutes)
 
 // Error Handler
 app.use(errorHandler)
