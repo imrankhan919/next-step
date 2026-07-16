@@ -34,11 +34,12 @@ const registerUser = async (req, res) => {
     const salt = bcrypt.genSaltSync(10);
     const hashedPassword = bcrypt.hashSync(password, salt);
 
-    // Upload to cloudinary
-    let uploadResult = await uploadToCloudinary(req.file.path)
-
-    // Remove From Server
-    fs.unlinkSync(req.file.path)
+    if (!emailExist || !phoneExist) {
+        // Upload to cloudinary
+        let uploadResult = await uploadToCloudinary(req.file.path)
+        // Remove From Server
+        fs.unlinkSync(req.file.path)
+    }
 
     const user = await User.create({
         name,

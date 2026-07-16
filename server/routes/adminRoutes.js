@@ -1,6 +1,7 @@
 import express from "express"
 import adminController from "../controllers/adminController.js"
 import protect from "../middleware/authMiddleware.js"
+import { adminAiChat } from "../controllers/roadmapController.js"
 
 const router = express.Router()
 
@@ -13,5 +14,6 @@ router.get("/counselors", protect.forAdmin, adminController.getCounselors)
 router.put("/counselors/:cnid", protect.forAdmin, adminController.updateCounselor)
 router.get("/credits", protect.forAdmin, adminController.getAllCreditRequests)
 router.put("/credits/:rid", protect.forAdmin, adminController.updateCredit)
+router.post("/ai", protect.forAdmin, adminAiChat)
 
 export default router
