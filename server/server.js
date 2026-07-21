@@ -6,6 +6,10 @@ import express from "express"
 import dotenv from "dotenv"
 dotenv.config()
 import colors from "colors"
+import http from "http"
+import { Server } from "socket.io";
+import socketAuthMiddleware from "./socket/socketAuth.js";
+import { chatHandler } from "./socket/chatHandler.js"
 
 // Local Imports
 import connectDB from "./config/dbConfig.js"
@@ -20,9 +24,27 @@ import aiRoutes from "./routes/roadmapRoutes.js"
 const PORT = process.env.PORT || 5000
 
 const app = express()
+const server = http.createServer(app)
 
 // DB CONNECTION
 connectDB()
+
+
+// Socket Config
+const io = new Server(server, {
+    cors: {
+        origin: process.env.CLIENT_URL || "http://localhost:5173",
+        credentials: true
+    }
+})
+
+io.use(socketAuthMiddleware)
+
+io.on("connection", (socket) => {
+    console.log(`User connected : ${socket.userId}`)
+    chatHandler(io, socket)
+})
+
 
 // Body-Parser
 app.use(express.json())
