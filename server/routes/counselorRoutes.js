@@ -6,6 +6,7 @@ import counselorController from "../controllers/counselorController.js"
 const router = express.Router()
 
 router.post("/", protect.forUser, counselorController.becomeCounselor)
+router.get("/", counselorController.getActiveCounselors)
 
 
 export default router

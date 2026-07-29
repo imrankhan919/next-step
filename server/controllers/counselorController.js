@@ -46,12 +46,24 @@ const becomeCounselor = async (req, res) => {
 
 }
 
+const getActiveCounselors = async (req, res) => {
+    const counselors = await Counselor.find()
+
+    if (!counselors) {
+        res.status(404)
+        throw new Error("Counselors Not Found!")
+    }
+
+    const activeCounselors = counselors.filter(counselor => counselor.status === "accepted")
+
+    res.status(200).json(activeCounselors)
+
+}
 
 
 
 
-
-const counselorController = { becomeCounselor }
+const counselorController = { becomeCounselor, getActiveCounselors }
 
 
 export default counselorController
