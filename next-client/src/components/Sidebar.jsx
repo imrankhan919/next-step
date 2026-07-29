@@ -1,0 +1,53 @@
+import { Link } from "react-router-dom";
+
+export default function Sidebar({ activeTab = 'overview', role = 'student' }) {
+  const studentNav = [
+    { id: 'overview', label: 'My Dashboard', link: "/profile", icon: '📊' },
+    { id: 'roadmap', label: 'AI Roadmap', link: "/profile/my-roadmaps", icon: '⚡' },
+    { id: 'messages', label: 'Messages & Chat', link: "/profile/chat", icon: '💬' },
+    { id: 'credits', label: 'My Credits & Wallet', link: "/profile/my-credits", icon: '🪙' },
+    { id: 'become_counselor', label: 'Join as Counselor', link: "/profile/become-counselor", icon: '🎓' },
+  ];
+
+  const adminNav = [
+    { id: 'admin_overview', label: 'System Overview', link: "/admin", icon: '🛡️' },
+    { id: 'admin_users', label: 'User Directory', link: "/admin/users", icon: '👥' },
+    { id: 'admin_categories', label: 'Categories & Tags', link: "/admin/categories", icon: '🏷️' },
+    { id: 'admin_approvals', label: 'Counselor Approvals', link: "/admin/approvals", icon: '📝' },
+    { id: 'admin_credit_requests', label: 'Credit Requests', link: "/admin/credit_requests", icon: '💳' },
+    { id: 'admin_ai', label: 'AI Prompt Engine', link: "/admin/ai", icon: '🤖' },
+  ];
+
+  const counselorNav = [
+    { id: 'counselor_overview', label: 'Counselor Workspace', icon: '📈' },
+    { id: 'counselor_sessions', label: 'Student Bookings', icon: '📅' },
+    { id: 'counselor_messages', label: 'Student Messages', icon: '💬' },
+    { id: 'counselor_earnings', label: 'Earnings & Credits', icon: '💰' },
+  ];
+
+  const items = role === 'admin' ? adminNav : role === 'counselor' ? counselorNav : studentNav;
+
+  return (
+    <aside class="hidden w-64 bg-parchment-card border-r-4 border-navy p-4 md:flex flex-col justify-between min-h-[calc(100vh-65px)]">
+      <div class="space-y-6">
+        {/* Navigation Items */}
+        <nav class="space-y-2">
+          {items.map((item) => (
+            <Link
+              key={item.id}
+              to={item.link}
+              class={`flex items-center space-x-3 px-3 py-2.5 rounded-lg border-2 border-navy transition-all font-grotesk font-bold text-sm ${activeTab === item.id
+                ? 'bg-yellow text-navy shadow-pop-sm'
+                : 'bg-parchment text-navy hover:bg-parchment-dim'
+                }`}
+            >
+              <span class="text-lg">{item.icon}</span>
+              <span>{item.label}</span>
+            </Link>
+          ))}
+        </nav>
+      </div>
+
+    </aside>
+  );
+}
