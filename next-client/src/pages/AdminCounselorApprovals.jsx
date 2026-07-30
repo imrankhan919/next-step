@@ -11,48 +11,48 @@ export default function AdminCounselorApprovals() {
   ];
 
   return (
-    <div class="min-h-screen bg-parchment flex flex-col">
+    <div className="min-h-screen bg-parchment flex flex-col">
       <Navbar activePage="admin" />
 
-      <div class="flex-1 flex">
+      <div className="flex-1 flex">
         <Sidebar activeTab="admin_approvals" role="admin" />
 
-        <main class="flex-1 p-8 bg-grid-pattern overflow-y-auto">
-          <div class="mb-8">
-            <div class="inline-block bg-yellow border-3 border-navy px-3 py-1 rounded-full shadow-pop-sm font-mono text-xs font-bold text-navy mb-2">
+        <main className="flex-1 p-8 bg-grid-pattern overflow-y-auto">
+          <div className="mb-8">
+            <div className="inline-block bg-yellow border-3 border-navy px-3 py-1 rounded-full shadow-pop-sm font-mono text-xs font-bold text-navy mb-2">
               MODERATION QUEUE
             </div>
-            <h1 class="font-grotesk font-extrabold text-3xl text-navy">
-              Pending Counselor <span class="text-rust">Approvals</span>
+            <h1 className="font-grotesk font-extrabold text-3xl text-navy">
+              Pending Counselor <span className="text-rust">Approvals</span>
             </h1>
-            <p class="font-body text-sm text-navy-muted mt-1">
+            <p className="font-body text-sm text-navy-muted mt-1">
               Review credential documents and approve or reject mentor partner applications.
             </p>
           </div>
 
-          <div class="space-y-6 max-w-4xl">
+          <div className="space-y-6 max-w-4xl">
             {pendingApps.map((app) => (
-              <div key={app.id} class="bg-parchment-card border-4 border-navy rounded-3xl p-6 shadow-pop">
-                <div class="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4 pb-4 border-b-2 border-navy/20">
+              <div key={app.id} className="bg-parchment-card border-4 border-navy rounded-3xl p-6 shadow-pop">
+                <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4 pb-4 border-b-2 border-navy/20">
                   <div>
-                    <div class="flex items-center space-x-2">
-                      <h2 class="font-grotesk font-extrabold text-xl text-navy">{app.name}</h2>
+                    <div className="flex items-center space-x-2">
+                      <h2 className="font-grotesk font-extrabold text-xl text-navy">{app.name}</h2>
                       <StatusBadge text={app.status} status="warning" />
                     </div>
-                    <p class="font-mono text-xs font-bold text-navy-muted">{app.title} • {app.exp}</p>
-                    <p class="font-mono text-xs text-rust mt-0.5">🔗 {app.linkedin}</p>
+                    <p className="font-mono text-xs font-bold text-navy-muted">{app.title} • {app.exp}</p>
+                    <p className="font-mono text-xs text-rust mt-0.5">🔗 {app.linkedin}</p>
                   </div>
-                  <div class="font-mono text-xs font-bold text-navy bg-yellow px-3 py-1.5 rounded-full border-2 border-navy">
+                  <div className="font-mono text-xs font-bold text-navy bg-yellow px-3 py-1.5 rounded-full border-2 border-navy">
                     Domain: {app.domain}
                   </div>
                 </div>
 
-                <div class="flex flex-wrap items-center justify-between gap-4">
-                  <div class="font-mono text-xs text-navy-muted">
-                    📄 Verified Document: <span class="font-bold underline text-navy">Work_ID_Proof.pdf</span>
+                <div className="flex flex-wrap items-center justify-between gap-4">
+                  <div className="font-mono text-xs text-navy-muted">
+                    📄 Verified Document: <span className="font-bold underline text-navy">Work_ID_Proof.pdf</span>
                   </div>
 
-                  <div class="flex space-x-3">
+                  <div className="flex space-x-3">
                     <Button variant="accent" size="sm">
                       Reject Application
                     </Button>

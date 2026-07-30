@@ -28,20 +28,20 @@ export default function Sidebar({ activeTab = 'overview', role = 'student' }) {
   const items = role === 'admin' ? adminNav : role === 'counselor' ? counselorNav : studentNav;
 
   return (
-    <aside class="hidden w-64 bg-parchment-card border-r-4 border-navy p-4 md:flex flex-col justify-between min-h-[calc(100vh-65px)]">
-      <div class="space-y-6">
+    <aside className="hidden w-64 bg-parchment-card border-r-4 border-navy p-4 md:flex flex-col justify-between min-h-[calc(100vh-65px)]">
+      <div className="space-y-6">
         {/* Navigation Items */}
-        <nav class="space-y-2">
+        <nav className="space-y-2">
           {items.map((item) => (
             <Link
               key={item.id}
               to={item.link}
-              class={`flex items-center space-x-3 px-3 py-2.5 rounded-lg border-2 border-navy transition-all font-grotesk font-bold text-sm ${activeTab === item.id
+              className={`flex items-center space-x-3 px-3 py-2.5 rounded-lg border-2 border-navy transition-all font-grotesk font-bold text-sm ${activeTab === item.id
                 ? 'bg-yellow text-navy shadow-pop-sm'
                 : 'bg-parchment text-navy hover:bg-parchment-dim'
                 }`}
             >
-              <span class="text-lg">{item.icon}</span>
+              <span className="text-lg">{item.icon}</span>
               <span>{item.label}</span>
             </Link>
           ))}

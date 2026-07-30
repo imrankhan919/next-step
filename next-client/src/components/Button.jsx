@@ -16,7 +16,7 @@ export default function Button({ children, variant = 'primary', size = 'md', cla
   return (
     <button
       type="button"
-      class={`font-grotesk tracking-wide rounded-full transition-all active:translate-x-1 active:translate-y-1 active:shadow-none ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
+      className={`font-grotesk tracking-wide rounded-full transition-all active:translate-x-1 active:translate-y-1 active:shadow-none ${variantStyles[variant]} ${sizeStyles[size]} ${className}`}
     >
       {children}
     </button>

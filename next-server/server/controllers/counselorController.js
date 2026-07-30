@@ -47,7 +47,7 @@ const becomeCounselor = async (req, res) => {
 }
 
 const getActiveCounselors = async (req, res) => {
-    const counselors = await Counselor.find()
+    const counselors = await Counselor.find().populate('user').populate('category')
 
     if (!counselors) {
         res.status(404)
