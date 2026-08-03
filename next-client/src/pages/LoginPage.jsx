@@ -1,7 +1,62 @@
+import { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Navbar from '../components/Navbar';
+import { useMutation } from '@tanstack/react-query';
+import authService from '../services/authService';
+import { useDispatch, useSelector } from 'react-redux';
+import AlertModal from '../components/AlertModal';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
+import { setUser } from '../features/auth/authSlice';
 
 export default function LoginPage() {
+
+  const { user } = useSelector(state => state.auth)
+
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+
+  const { mutate, data, isPending, isSuccess, isError, error } = useMutation({ mutationFn: (credentials) => authService.loginUser(credentials) })
+  const [formData, setFormData] = useState({ email: "", password: "" })
+
+  const { email, password } = formData
+
+
+  console.log(isPending, isSuccess)
+
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    mutate(formData)
+  }
+
+  useEffect(() => {
+
+    if (isSuccess) {
+      dispatch(setUser(data))
+    }
+
+
+    if (user) {
+      navigate("/auth/profile")
+    }
+
+    if (isError) {
+      toast.error(error?.response.data.message, { position: "top-center" })
+    }
+
+
+  }, [isSuccess, isError, user, data])
+
+
   return (
     <div className="min-h-screen bg-parchment flex flex-col">
       <Header />
@@ -24,14 +79,16 @@ export default function LoginPage() {
             </p>
           </div>
 
-          <form className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block font-grotesk font-bold text-xs uppercase tracking-wider text-navy mb-2">
                 Student Email Address
               </label>
               <input
                 type="email"
-                defaultValue="aarav.sharma@iitd.ac.in"
+                name='email'
+                onChange={handleChange}
+                defaultValue={email}
                 placeholder="e.g. aarav@example.com"
                 className="w-full bg-parchment border-3 border-navy rounded-xl px-4 py-3 font-body text-sm text-navy focus:outline-none focus:bg-white shadow-pop-sm"
               />
@@ -48,7 +105,9 @@ export default function LoginPage() {
               </div>
               <input
                 type="password"
-                defaultValue="••••••••••••"
+                name='password'
+                onChange={handleChange}
+                defaultValue={password}
                 placeholder="Enter your password"
                 className="w-full bg-parchment border-3 border-navy rounded-xl px-4 py-3 font-body text-sm text-navy focus:outline-none focus:bg-white shadow-pop-sm"
               />
@@ -67,7 +126,7 @@ export default function LoginPage() {
             </div>
 
             <button
-              type="button"
+              type="submit"
               className="w-full bg-yellow hover:bg-yellow-fixed text-navy font-grotesk font-extrabold text-base py-3.5 rounded-2xl border-3 border-navy shadow-pop transition-all active:translate-x-1 active:translate-y-1 active:shadow-none"
             >
               LOG IN TO DASHBOARD →

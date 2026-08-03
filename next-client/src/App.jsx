@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { Toaster } from 'react-hot-toast';
 
 // Import all 20 page screens for workshop previewing
 import LandingPage from './pages/LandingPage';
@@ -59,6 +60,7 @@ export default function App() {
             <Route path='ai-roadmap' element={<RoadmapGenerator />} />
           </Route>
         </Routes>
+        <Toaster />
       </Router>
     </QueryClientProvider>
   );
