@@ -1,8 +1,12 @@
+import { LogOut } from "lucide-react";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 
 export default function Navbar({ activePage = 'dashboard' }) {
 
-  const userType = "student"
+  const { user } = useSelector(state => state.auth)
+
+  const userType = user?.userType
 
   return (
     <header className="w-full bg-parchment-card border-b-4 border-navy px-4 lg:px-8 py-3 sticky top-0 z-40">
@@ -89,17 +93,26 @@ export default function Navbar({ activePage = 'dashboard' }) {
           }
 
           {/* User Profile Avatar */}
-          <a
-            href="#"
+          <div
             className="flex items-center space-x-2 bg-sky/30 border-2 border-navy px-2.5 py-1 rounded-full shadow-pop-sm hover:bg-sky/50"
           >
             <div className="w-7 h-7 rounded-full bg-sky border border-navy flex items-center justify-center font-grotesk font-bold text-xs text-navy">
-              AS
+              {user.name[0]}
             </div>
             <span className="hidden sm:inline font-grotesk font-bold text-xs text-navy">
-              Aarav S.
+              {user?.name}
             </span>
-          </a>
+          </div>
+          <button
+            className="flex items-center space-x-2 bg-red-500 border-2 border-navy px-2.5 py-1 rounded-full shadow-pop-sm hover:bg-red-700"
+          >
+            <div className="w-7 h-7 rounded-full bg-red-200 border border-navy flex items-center justify-center font-grotesk font-bold text-xs text-navy">
+              <LogOut height={12} />
+            </div>
+            <span className="hidden sm:inline font-grotesk font-bold text-xs text-white">
+              Logout
+            </span>
+          </button>
         </div>
       </div>
     </header>

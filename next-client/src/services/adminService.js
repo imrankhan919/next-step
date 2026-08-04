@@ -1,0 +1,34 @@
+import axios from "axios"
+
+const fetchAdminOverview = async (token) => {
+
+    const options = {
+        headers: {
+            authorization: `Bearer ${token}`
+        }
+    }
+
+    const usersData = await axios.get("/api/admin/users", options)
+    const categoriesData = await axios.get("/api/admin/category", options)
+    const careersData = await axios.get("/api/admin/career", options)
+    const counselorsData = await axios.get("/api/admin/counselors", options)
+    const creditsData = await axios.get("/api/admin/credits", options)
+
+    const data = {
+        users: usersData.data,
+        categories: categoriesData.data,
+        counselors: counselorsData.data,
+        credits: creditsData.data,
+        careers: careersData.data
+    }
+
+    return data
+}
+
+
+const adminService = {
+    fetchAdminOverview
+}
+
+
+export default adminService

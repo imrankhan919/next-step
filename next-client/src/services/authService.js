@@ -9,6 +9,7 @@ const registerUser = async (credentials) => {
 
 const loginUser = async (credentials) => {
     const response = await axios.post("/api/auth/login", credentials)
+    localStorage.setItem("user", JSON.stringify(response.data))
     return response.data
 }
 

@@ -8,6 +8,7 @@ import AlertModal from '../components/AlertModal';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { setUser } from '../features/auth/authSlice';
+import LoadingScreen from '../components/LoadingScreen';
 
 export default function LoginPage() {
 
@@ -23,7 +24,6 @@ export default function LoginPage() {
   const { email, password } = formData
 
 
-  console.log(isPending, isSuccess)
 
 
   const handleChange = (e) => {
@@ -55,6 +55,13 @@ export default function LoginPage() {
 
 
   }, [isSuccess, isError, user, data])
+
+
+  if (isPending) {
+    return (
+      <LoadingScreen loadingMessage='Logging In...' />
+    )
+  }
 
 
   return (

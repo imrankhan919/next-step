@@ -1,15 +1,54 @@
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
+import adminService from '../services/adminService';
+import LoadingScreen from '../components/LoadingScreen';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
+import { setAdminData } from '../features/admin/adminSlice';
+import toast from 'react-hot-toast';
+
 
 export default function AdminOverview() {
+
+  const dispatch = useDispatch()
+
+  const { user } = useSelector(state => state.auth)
+
+  const { data, isLoading, isSuccess, isError, error } = useQuery({ queryKey: ["admin"], queryFn: () => adminService.fetchAdminOverview(user.token) })
+
+
   const systemLogs = [
     { time: '14:22 IST', event: 'New Counselor Approval Request', detail: 'Prof. Rajesh Verma applied' },
     { time: '13:45 IST', event: 'Credit Purchase Completed', detail: 'Student #ST-902 bought 300 Credits (₹699)' },
     { time: '12:10 IST', event: 'AI Engine Execution', detail: 'Generated 42 roadmaps in past 1 hour' },
   ];
+
+
+  useEffect(() => {
+
+    if (isSuccess) {
+      dispatch(setAdminData(data))
+    }
+
+    if (isError) {
+      toast.error(error?.response?.data?.message, { position: "top-center" })
+    }
+
+  }, [isSuccess, isError, error, data])
+
+
+  if (isLoading) {
+    return (
+      <LoadingScreen loadingMessage='Fetching All Data...' />
+    )
+  }
+
+
+
 
   return (
     <div className="min-h-screen bg-parchment flex flex-col">

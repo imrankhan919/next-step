@@ -2,20 +2,20 @@ import { Link } from "react-router-dom";
 
 export default function Sidebar({ activeTab = 'overview', role = 'student' }) {
   const studentNav = [
-    { id: 'overview', label: 'My Dashboard', link: "/profile", icon: '📊' },
-    { id: 'roadmap', label: 'AI Roadmap', link: "/profile/my-roadmaps", icon: '⚡' },
-    { id: 'messages', label: 'Messages & Chat', link: "/profile/chat", icon: '💬' },
-    { id: 'credits', label: 'My Credits & Wallet', link: "/profile/my-credits", icon: '🪙' },
-    { id: 'become_counselor', label: 'Join as Counselor', link: "/profile/become-counselor", icon: '🎓' },
+    { id: 'overview', label: 'My Dashboard', link: "/auth/profile", icon: '📊' },
+    { id: 'roadmap', label: 'AI Roadmap', link: "/auth/profile/my-roadmaps", icon: '⚡' },
+    { id: 'messages', label: 'Messages & Chat', link: "/auth/profile/chat", icon: '💬' },
+    { id: 'credits', label: 'My Credits & Wallet', link: "/auth/profile/my-credits", icon: '🪙' },
+    { id: 'become_counselor', label: 'Join as Counselor', link: "/auth/profile/become-counselor", icon: '🎓' },
   ];
 
   const adminNav = [
-    { id: 'admin_overview', label: 'System Overview', link: "/admin", icon: '🛡️' },
-    { id: 'admin_users', label: 'User Directory', link: "/admin/users", icon: '👥' },
-    { id: 'admin_categories', label: 'Categories & Tags', link: "/admin/categories", icon: '🏷️' },
-    { id: 'admin_approvals', label: 'Counselor Approvals', link: "/admin/approvals", icon: '📝' },
-    { id: 'admin_credit_requests', label: 'Credit Requests', link: "/admin/credit_requests", icon: '💳' },
-    { id: 'admin_ai', label: 'AI Prompt Engine', link: "/admin/ai", icon: '🤖' },
+    { id: 'admin_overview', label: 'System Overview', link: "/auth/admin", icon: '🛡️' },
+    { id: 'admin_users', label: 'User Directory', link: "/auth/admin/users", icon: '👥' },
+    { id: 'admin_categories', label: 'Categories & Tags', link: "/auth/admin/categories", icon: '🏷️' },
+    { id: 'admin_approvals', label: 'Counselor Approvals', link: "/auth/admin/approvals", icon: '📝' },
+    { id: 'admin_credit_requests', label: 'Credit Requests', link: "/auth/admin/credit_requests", icon: '💳' },
+    { id: 'admin_ai', label: 'AI Prompt Engine', link: "/auth/admin/ai", icon: '🤖' },
   ];
 
   const counselorNav = [
