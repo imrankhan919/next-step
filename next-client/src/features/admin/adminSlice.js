@@ -6,6 +6,7 @@ const initialState = {
     categories: null,
     credits: null,
     counselors: null,
+    roadmaps: null
 }
 
 const adminSlice = createSlice({

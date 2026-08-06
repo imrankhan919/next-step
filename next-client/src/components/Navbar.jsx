@@ -1,12 +1,23 @@
 import { LogOut } from "lucide-react";
-import { useSelector } from "react-redux";
-import { Link } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import { logOutUser } from "../features/auth/authSlice";
 
 export default function Navbar({ activePage = 'dashboard' }) {
 
   const { user } = useSelector(state => state.auth)
 
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const userType = user?.userType
+
+  const handleLogout = () => {
+    localStorage.removeItem('user')
+    dispatch(logOutUser())
+    navigate("/")
+  }
+
 
   return (
     <header className="w-full bg-parchment-card border-b-4 border-navy px-4 lg:px-8 py-3 sticky top-0 z-40">
@@ -104,6 +115,7 @@ export default function Navbar({ activePage = 'dashboard' }) {
             </span>
           </div>
           <button
+            onClick={handleLogout}
             className="flex items-center space-x-2 bg-red-500 border-2 border-navy px-2.5 py-1 rounded-full shadow-pop-sm hover:bg-red-700"
           >
             <div className="w-7 h-7 rounded-full bg-red-200 border border-navy flex items-center justify-center font-grotesk font-bold text-xs text-navy">

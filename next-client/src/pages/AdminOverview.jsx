@@ -21,11 +21,13 @@ export default function AdminOverview() {
   const { data, isLoading, isSuccess, isError, error } = useQuery({ queryKey: ["admin"], queryFn: () => adminService.fetchAdminOverview(user.token) })
 
 
-  const systemLogs = [
-    { time: '14:22 IST', event: 'New Counselor Approval Request', detail: 'Prof. Rajesh Verma applied' },
-    { time: '13:45 IST', event: 'Credit Purchase Completed', detail: 'Student #ST-902 bought 300 Credits (₹699)' },
-    { time: '12:10 IST', event: 'AI Engine Execution', detail: 'Generated 42 roadmaps in past 1 hour' },
-  ];
+
+  const activeCounselors = data?.counselors.filter(item => item.status === "accepted").length
+  const pendingRequests = data?.counselors.filter(item => item.status !== "accepted")
+  const approvedCredits = data?.credits.filter(item => item.status === "granted").reduce((acc, item) => acc + item.credits, 0)
+
+
+
 
 
   useEffect(() => {
@@ -85,63 +87,46 @@ export default function AdminOverview() {
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
             <Card color="white">
               <div className="font-mono text-xs font-bold text-navy-muted uppercase">Total Registered Users</div>
-              <div className="font-grotesk font-extrabold text-3xl text-navy mt-2">24,520</div>
-              <div className="text-xs text-rust font-bold mt-1">+1,240 students this week</div>
+              <div className="font-grotesk font-extrabold text-3xl text-navy mt-2">{data?.users?.length}</div>
+              <div className="text-xs text-rust font-bold mt-1">+10 students this week</div>
             </Card>
 
             <Card color="white">
               <div className="font-mono text-xs font-bold text-navy-muted uppercase">Active Counselors</div>
-              <div className="font-grotesk font-extrabold text-3xl text-navy mt-2">142 Mentors</div>
-              <div className="text-xs text-teal font-bold mt-1">8 Pending Applications</div>
+              <div className="font-grotesk font-extrabold text-3xl text-navy mt-2">{activeCounselors}</div>
+              <div className="text-xs text-teal font-bold mt-1">Pending Approvals : {pendingRequests.length}</div>
             </Card>
 
             <Card color="white">
               <div className="font-mono text-xs font-bold text-navy-muted uppercase">Credits Circulating</div>
-              <div className="font-grotesk font-extrabold text-3xl text-navy mt-2">1.82M pts</div>
-              <div className="text-xs text-rust font-bold mt-1">₹4.2L Monthly Credit Revenue</div>
+              <div className="font-grotesk font-extrabold text-3xl text-navy mt-2">{approvedCredits}</div>
+              <div className="text-xs text-rust font-bold mt-1">₹4.2L Credit Revenue</div>
             </Card>
 
             <Card color="yellow">
               <div className="font-mono text-xs font-bold text-navy uppercase">AI Roadmaps Generated</div>
-              <div className="font-grotesk font-extrabold text-3xl text-navy mt-2">84,100</div>
+              <div className="font-grotesk font-extrabold text-3xl text-navy mt-2">{data?.roadmaps?.length}</div>
               <div className="text-xs text-navy font-bold mt-1">99.8% System Uptime</div>
             </Card>
           </div>
 
           {/* Activity Log & Pending Actions */}
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 gap-8">
             <div className="lg:col-span-2">
               <div className="bg-parchment-card border-4 border-navy rounded-3xl p-6 shadow-pop">
-                <h2 className="font-grotesk font-extrabold text-xl text-navy mb-4">Real-Time System Log</h2>
+                <h2 className="font-grotesk font-extrabold text-xl text-navy mb-4">Pending Counselor Requests</h2>
                 <div className="space-y-3 font-mono text-xs">
-                  {systemLogs.map((log, i) => (
-                    <div key={i} className="bg-parchment border-2 border-navy p-3 rounded-xl flex justify-between items-center">
+                  {pendingRequests.map((request) => (
+                    <div key={request._id} className="bg-parchment border-2 border-navy p-3 rounded-xl flex justify-between items-center">
                       <div>
-                        <span className="font-bold text-rust">[{log.time}]</span>{' '}
-                        <span className="font-bold text-navy">{log.event}</span>
-                        <div className="text-navy-muted text-[11px] mt-0.5">{log.detail}</div>
+                        <span className="font-bold text-rust">[{new Date(request?.createdAt).toLocaleDateString('en-IN')}]</span>{' '}
+                        <span className="font-bold text-navy">{request?.user?.name}</span>
+                        <div className="text-navy-muted text-[11px] mt-0.5">{request?.category?.title}</div>
                       </div>
-                      <StatusBadge text="LOGGED" status="info" />
+                      <StatusBadge text={request?.status} status="warning" />
                     </div>
                   ))}
                 </div>
-              </div>
-            </div>
-
-            <div className="space-y-6">
-              <div className="bg-rust-container border-4 border-navy rounded-3xl p-6 shadow-pop">
-                <StatusBadge text="ACTION REQUIRED" status="warning" />
-                <h3 className="font-grotesk font-extrabold text-lg text-navy mt-3">Pending Moderation Queue</h3>
-                <ul className="mt-3 space-y-2 font-mono text-xs text-navy">
-                  <li className="flex justify-between">
-                    <span>• Counselor Approvals:</span>
-                    <span className="font-bold text-rust">8 Applications</span>
-                  </li>
-                  <li className="flex justify-between">
-                    <span>• Manual Credit Grants:</span>
-                    <span className="font-bold text-rust">3 Requests</span>
-                  </li>
-                </ul>
               </div>
             </div>
           </div>

@@ -13,13 +13,15 @@ const fetchAdminOverview = async (token) => {
     const careersData = await axios.get("/api/admin/career", options)
     const counselorsData = await axios.get("/api/admin/counselors", options)
     const creditsData = await axios.get("/api/admin/credits", options)
+    const roadmapData = await axios.get("/api/admin/roadmaps", options)
 
     const data = {
         users: usersData.data,
         categories: categoriesData.data,
         counselors: counselorsData.data,
         credits: creditsData.data,
-        careers: careersData.data
+        careers: careersData.data,
+        roadmaps: roadmapData.data
     }
 
     return data

@@ -3,8 +3,17 @@ import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
+import { useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export default function StudentDashboard() {
+
+  const { user } = useSelector(state => state.auth)
+
+  const navigate = useNavigate()
+
+
   const upcomingSessions = [
     {
       id: 1,
@@ -44,6 +53,13 @@ export default function StudentDashboard() {
       badge: 'IN PROGRESS',
     },
   ];
+
+
+  useEffect(() => {
+    if (user.userType === "ADMIN") {
+      navigate("/auth/admin")
+    }
+  }, [user])
 
   return (
     <div className="min-h-screen bg-parchment flex flex-col">

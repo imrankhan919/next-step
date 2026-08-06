@@ -2,6 +2,7 @@ import Career from "../models/careerModel.js"
 import Category from "../models/categoryModel.js"
 import Counselor from "../models/counselorModel.js"
 import Credit from "../models/creditModel.js"
+import Roadmap from "../models/roadmapModel.js"
 import User from "../models/userModel.js"
 
 const getUsers = async (req, res) => {
@@ -184,7 +185,22 @@ const updateCredit = async (req, res) => {
 }
 
 
+const getAllRoadmaps = async (req, res) => {
+    const roadmaps = await Roadmap.find().populate('user')
 
-const adminController = { getUsers, createCategory, getCategories, createCareer, getCareers, getCounselors, updateCounselor, getAllCreditRequests, updateCredit }
+    if (!roadmaps) {
+        res.status(404)
+        throw new Error("Roadmaps Not Found")
+    }
+
+    res.status(200).json(roadmaps)
+
+
+}
+
+
+
+
+const adminController = { getUsers, createCategory, getCategories, createCareer, getCareers, getCounselors, updateCounselor, getAllCreditRequests, updateCredit, getAllRoadmaps }
 
 export default adminController
