@@ -3,12 +3,49 @@ import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
+import LoadingScreen from '../components/LoadingScreen';
+import toast from 'react-hot-toast';
+import { setAdminData } from '../features/admin/adminSlice';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
+import adminService from '../services/adminService';
 
 export default function AdminCounselorApprovals() {
-  const pendingApps = [
-    { id: 'app-901', name: 'Prof. Rajesh Verma', title: 'Admissions Mentor @ IIM Ahmedabad', exp: '20+ Yrs', domain: 'MBA & Leadership', status: 'Pending Review', linkedin: 'linkedin.com/in/rajesh-verma' },
-    { id: 'app-902', name: 'Kavita Sundaram', title: 'Senior Data Scientist @ Flipkart', exp: '7+ Yrs', domain: 'Data Science & AI', status: 'Pending Review', linkedin: 'linkedin.com/in/kavita-s' },
-  ];
+
+
+  const dispatch = useDispatch()
+
+  const { user } = useSelector(state => state.auth)
+
+  const { data, isLoading, isSuccess, isError, error } = useQuery({ queryKey: ["admin"], queryFn: () => adminService.fetchAdminOverview(user.token) })
+  const { counselors } = useSelector(state => state.admin)
+
+  const pendingRequests = counselors?.filter(item => item.status !== "accepted")
+
+
+
+  useEffect(() => {
+
+    if (isSuccess) {
+      dispatch(setAdminData(data))
+    }
+
+    if (isError) {
+      toast.error(error?.response?.data?.message, { position: "top-center" })
+    }
+
+  }, [isSuccess, isError, error, data])
+
+
+  if (isLoading) {
+    return (
+      <LoadingScreen loadingMessage='Fetching All Data...' />
+    )
+  }
+
+
+
 
   return (
     <div className="min-h-screen bg-parchment flex flex-col">
@@ -31,27 +68,23 @@ export default function AdminCounselorApprovals() {
           </div>
 
           <div className="space-y-6 max-w-4xl">
-            {pendingApps.map((app) => (
-              <div key={app.id} className="bg-parchment-card border-4 border-navy rounded-3xl p-6 shadow-pop">
+            {pendingRequests.map((app) => (
+              <div key={app._id} className="bg-parchment-card border-4 border-navy rounded-3xl p-6 shadow-pop">
                 <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-4 pb-4 border-b-2 border-navy/20">
                   <div>
                     <div className="flex items-center space-x-2">
-                      <h2 className="font-grotesk font-extrabold text-xl text-navy">{app.name}</h2>
+                      <h2 className="font-grotesk font-extrabold text-xl text-navy">{app.user.name}</h2>
                       <StatusBadge text={app.status} status="warning" />
                     </div>
-                    <p className="font-mono text-xs font-bold text-navy-muted">{app.title} • {app.exp}</p>
-                    <p className="font-mono text-xs text-rust mt-0.5">🔗 {app.linkedin}</p>
+                    <p className="font-mono text-xs font-bold text-navy-muted">{app.category.title} • {app.user.location}</p>
+                    <p className="font-mono text-xs text-rust mt-0.5">🔗 {app.user.email}</p>
                   </div>
                   <div className="font-mono text-xs font-bold text-navy bg-yellow px-3 py-1.5 rounded-full border-2 border-navy">
-                    Domain: {app.domain}
+                    Qualification : {app.user.qualification}
                   </div>
                 </div>
 
                 <div className="flex flex-wrap items-center justify-between gap-4">
-                  <div className="font-mono text-xs text-navy-muted">
-                    📄 Verified Document: <span className="font-bold underline text-navy">Work_ID_Proof.pdf</span>
-                  </div>
-
                   <div className="flex space-x-3">
                     <Button variant="accent" size="sm">
                       Reject Application

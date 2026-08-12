@@ -15,6 +15,7 @@ router.put("/counselors/:cnid", protect.forAdmin, adminController.updateCounselo
 router.get("/credits", protect.forAdmin, adminController.getAllCreditRequests)
 router.put("/credits/:rid", protect.forAdmin, adminController.updateCredit)
 router.get("/roadmaps", protect.forAdmin, adminController.getAllRoadmaps)
+router.put("/:uid", protect.forAdmin, adminController.updateUser)
 router.post("/ai", protect.forAdmin, adminAiChat)
 
 export default router

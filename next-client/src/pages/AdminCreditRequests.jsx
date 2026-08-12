@@ -3,12 +3,52 @@ import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
+import LoadingScreen from '../components/LoadingScreen';
+import toast from 'react-hot-toast';
+import { setAdminData } from '../features/admin/adminSlice';
+import { useEffect } from 'react';
+import adminService from '../services/adminService';
+import { useDispatch, useSelector } from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
 
 export default function AdminCreditRequests() {
   const requests = [
     { id: 'cr-401', student: 'Rohan Gupta', college: 'DTU Delhi', credits: '100 Credits', reason: 'Financial Hardship Grant Request', date: '24 Jul 2026', status: 'Pending Review' },
     { id: 'cr-402', student: 'Meera Nambiar', college: 'CUSAT Kerala', credits: '50 Credits', reason: 'Manual Bank Transfer Verification (Ref #8932)', date: '23 Jul 2026', status: 'Pending Review' },
   ];
+
+
+  const dispatch = useDispatch()
+
+  const { user } = useSelector(state => state.auth)
+
+  const { data, isLoading, isSuccess, isError, error } = useQuery({ queryKey: ["admin"], queryFn: () => adminService.fetchAdminOverview(user.token) })
+  const { credits } = useSelector(state => state.admin)
+
+  const pendingRequests = credits?.filter(item => item.status !== "granted")
+
+
+
+  useEffect(() => {
+
+    if (isSuccess) {
+      dispatch(setAdminData(data))
+    }
+
+    if (isError) {
+      toast.error(error?.response?.data?.message, { position: "top-center" })
+    }
+
+  }, [isSuccess, isError, error, data])
+
+
+  if (isLoading) {
+    return (
+      <LoadingScreen loadingMessage='Fetching All Data...' />
+    )
+  }
+
+
 
   return (
     <div class="min-h-screen bg-parchment flex flex-col">
@@ -31,15 +71,15 @@ export default function AdminCreditRequests() {
           </div>
 
           <div class="space-y-4 max-w-4xl">
-            {requests.map((r) => (
-              <div key={r.id} class="bg-parchment-card border-4 border-navy rounded-3xl p-6 shadow-pop flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
+            {pendingRequests.map((r) => (
+              <div key={r._id} class="bg-parchment-card border-4 border-navy rounded-3xl p-6 shadow-pop flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
                 <div>
                   <div class="flex items-center space-x-2">
-                    <h3 class="font-grotesk font-extrabold text-lg text-navy">{r.student}</h3>
-                    <StatusBadge text={r.credits} status="success" />
+                    <h3 class="font-grotesk font-extrabold text-lg text-navy">{r.user.name}</h3>
+                    <StatusBadge text={r.credit} status="success" />
                   </div>
-                  <p class="font-mono text-xs text-navy-muted">{r.college} • {r.date}</p>
-                  <p class="font-body text-xs text-navy mt-1">Reason: "{r.reason}"</p>
+                  <p class="font-mono text-xs text-navy-muted">{r.user.location} • {new Date(r.createdAt).toLocaleDateString('en-IN')}</p>
+                  {/* <p class="font-body text-xs text-navy mt-1">Reason: "{r.reason}"</p> */}
                 </div>
 
                 <div class="flex space-x-3 w-full md:w-auto">

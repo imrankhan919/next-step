@@ -85,6 +85,12 @@ const loginUser = async (req, res) => {
 
     const user = await User.findOne({ email })
 
+    if (!user.isActive) {
+        res.status(401)
+        throw new Error("Your Account Has Been Suspended Contact Admin!")
+    }
+
+
     if (user && bcrypt.compareSync(password, user.password)) {
         res.status(201).json({
             _id: user._id,

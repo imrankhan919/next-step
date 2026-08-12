@@ -198,9 +198,31 @@ const getAllRoadmaps = async (req, res) => {
 
 }
 
+const updateUser = async (req, res) => {
+
+    const userId = req.params.uid
+
+    const user = await User.findById(userId)
+
+    if (!user) {
+        res.status(404)
+        throw new Error("User Not Exist")
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(user._id, { isActive: !user.isActive }, { new: true })
+
+    if (!updateUser) {
+        res.status(409)
+        throw new Error("User Not Updated!")
+    }
 
 
+    res.status(200).json(updatedUser)
 
-const adminController = { getUsers, createCategory, getCategories, createCareer, getCareers, getCounselors, updateCounselor, getAllCreditRequests, updateCredit, getAllRoadmaps }
+
+}
+
+
+const adminController = { getUsers, createCategory, getCategories, createCareer, getCareers, getCounselors, updateCounselor, getAllCreditRequests, updateCredit, getAllRoadmaps, updateUser }
 
 export default adminController

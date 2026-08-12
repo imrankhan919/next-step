@@ -28,8 +28,25 @@ const fetchAdminOverview = async (token) => {
 }
 
 
+const updateUser = async (payload) => {
+
+    const options = {
+        headers: {
+            authorization: `Bearer ${payload.token}`
+        }
+    }
+
+    const response = await axios.put("/api/admin/" + payload.uid, "_", options)
+    return response.data
+
+}
+
+
+
+
 const adminService = {
-    fetchAdminOverview
+    fetchAdminOverview,
+    updateUser
 }
 
 

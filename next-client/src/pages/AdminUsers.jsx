@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import LoadingScreen from '../components/LoadingScreen';
 import { useEffect } from 'react';
 import { setAdminData } from '../features/admin/adminSlice';
+import UpdateUserButton from '../components/UpdateUserButton';
 
 export default function AdminUsers() {
   const dispatch = useDispatch()
@@ -18,7 +19,6 @@ export default function AdminUsers() {
   const { users } = useSelector(state => state.admin)
 
   const { data, isLoading, isSuccess, isError, error } = useQuery({ queryKey: ["admin"], queryFn: () => adminService.fetchAdminOverview(user.token) })
-
 
 
 
@@ -93,12 +93,7 @@ export default function AdminUsers() {
                         <StatusBadge text={u.isActive ? "Active" : "Suspended"} status="success" />
                       </td>
                       <td className="p-3 text-right space-x-2">
-                        <button type="button" className="px-2 py-1 bg-parchment border border-navy rounded font-mono text-[10px] font-bold text-navy">
-                          Edit
-                        </button>
-                        <button type="button" className="px-2 py-1 bg-rust text-white border border-navy rounded font-mono text-[10px] font-bold">
-                          Suspend
-                        </button>
+                        <UpdateUserButton u={u} />
                       </td>
                     </tr>
                   ))}
