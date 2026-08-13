@@ -3,6 +3,7 @@ import React, { useEffect } from 'react'
 import adminService from '../services/adminService'
 import { useDispatch, useSelector } from 'react-redux'
 import { setUpdateUser } from '../features/admin/adminSlice'
+import toast from 'react-hot-toast'
 
 const UpdateUserButton = ({ u }) => {
 
@@ -24,6 +25,10 @@ const UpdateUserButton = ({ u }) => {
 
         if (isSuccess) {
             dispatch(setUpdateUser(data))
+        }
+
+        if (isError && error) {
+            toast.error(error)
         }
 
     }, [isSuccess, isError, error, data])

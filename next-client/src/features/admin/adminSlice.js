@@ -24,10 +24,16 @@ const adminSlice = createSlice({
                 ...state,
                 users: state.users.map(user => user._id === action.payload._id ? action.payload : user)
             }
+        },
+        setCategories: (state, action) => {
+            return {
+                ...state,
+                categories: [action.payload, ...state.categories]
+            }
         }
     }
 });
 
-export const { setAdminData, setUpdateUser } = adminSlice.actions
+export const { setAdminData, setUpdateUser, setCategories } = adminSlice.actions
 
 export default adminSlice.reducer

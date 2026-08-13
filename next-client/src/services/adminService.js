@@ -42,11 +42,29 @@ const updateUser = async (payload) => {
 }
 
 
+const addCategory = async (payload) => {
+
+
+
+    const options = {
+        headers: {
+            authorization: `Bearer ${payload.token}`
+        }
+    }
+
+    const response = await axios.post("/api/admin/category", { title: payload.title }, options)
+    console.log(response)
+    return response.data
+
+}
+
+
 
 
 const adminService = {
     fetchAdminOverview,
-    updateUser
+    updateUser,
+    addCategory
 }
 
 
