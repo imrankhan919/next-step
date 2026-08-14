@@ -83,13 +83,6 @@ export default function AdminCategories() {
                   <h3 className="font-grotesk font-extrabold text-xl text-navy">{cat.title}</h3>
                   <StatusBadge text={index + 1} status="info" />
                 </div>
-
-
-                <div className="pt-4 border-t-2 border-navy/20 flex space-x-2">
-                  <Button variant="accent" size="sm" className="flex-1">
-                    Remove Category
-                  </Button>
-                </div>
               </Card>
             ))}
           </div>

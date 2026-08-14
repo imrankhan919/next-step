@@ -30,10 +30,22 @@ const adminSlice = createSlice({
                 ...state,
                 categories: [action.payload, ...state.categories]
             }
+        },
+        setApprovals: (state, action) => {
+            return {
+                ...state,
+                counselors: state.counselors.map(counselor => counselor._id === action.payload._id ? action.payload : counselor)
+            }
+        },
+        setCreditApprovals: (state, action) => {
+            return {
+                ...state,
+                credits: state.credits.map(credit => credit._id === action.payload._id ? action.payload : credit)
+            }
         }
     }
 });
 
-export const { setAdminData, setUpdateUser, setCategories } = adminSlice.actions
+export const { setAdminData, setUpdateUser, setCategories, setApprovals, setCreditApprovals } = adminSlice.actions
 
 export default adminSlice.reducer

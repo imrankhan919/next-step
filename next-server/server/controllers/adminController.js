@@ -159,6 +159,8 @@ const updateCredit = async (req, res) => {
 
     const creditRequest = await Credit.findById(req.params.rid)
 
+
+
     if (!creditRequest) {
         res.status(404)
         throw new Error("Credit Request Not Found!")
@@ -167,12 +169,17 @@ const updateCredit = async (req, res) => {
     // Update Credits For User
     const user = await User.findById(creditRequest.user)
 
+
     if (!user) {
         res.status(404)
         throw new Error("No User Found!")
     }
 
-    const updatedUser = await User.findByIdAndUpdate(user._id, { credits: user.credits + creditRequest.credits }, { new: true })
+
+
+    if (status === "granted") {
+        const updatedUser = await User.findByIdAndUpdate(user._id, { credits: user.credits + creditRequest.credits }, { new: true })
+    }
 
     // Update Status
     const updatedCreditRequest = await Credit.findByIdAndUpdate(creditRequest._id, { status }, { new: true })
@@ -215,12 +222,9 @@ const updateUser = async (req, res) => {
         res.status(409)
         throw new Error("User Not Updated!")
     }
-
-
     res.status(200).json(updatedUser)
-
-
 }
+
 
 
 const adminController = { getUsers, createCategory, getCategories, createCareer, getCareers, getCounselors, updateCounselor, getAllCreditRequests, updateCredit, getAllRoadmaps, updateUser }

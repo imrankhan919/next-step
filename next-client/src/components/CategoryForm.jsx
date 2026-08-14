@@ -18,26 +18,20 @@ const CategoryForm = ({ handleShowForm }) => {
 
 
     const handleAddCategory = (e) => {
-
         e.preventDefault()
-
         mutate({
             token: user.token,
             title: title
         })
-
         setTitle("")
-        handleShowForm()
-
     }
 
 
     useEffect(() => {
 
-        // TODO : Not Dispatched
         if (isSuccess) {
-            console.log(data)
             dispatch(setCategories(data))
+            handleShowForm()
         }
 
         if (isError && error) {

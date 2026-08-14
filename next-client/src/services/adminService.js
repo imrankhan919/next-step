@@ -17,11 +17,11 @@ const fetchAdminOverview = async (token) => {
 
     const data = {
         users: usersData.data,
-        categories: categoriesData.data,
-        counselors: counselorsData.data,
-        credits: creditsData.data,
-        careers: careersData.data,
-        roadmaps: roadmapData.data
+        categories: categoriesData.data.reverse(),
+        counselors: counselorsData.data.reverse(),
+        credits: creditsData.data.reverse(),
+        careers: careersData.data.reverse(),
+        roadmaps: roadmapData.data.reverse()
     }
 
     return data
@@ -43,9 +43,6 @@ const updateUser = async (payload) => {
 
 
 const addCategory = async (payload) => {
-
-
-
     const options = {
         headers: {
             authorization: `Bearer ${payload.token}`
@@ -53,7 +50,33 @@ const addCategory = async (payload) => {
     }
 
     const response = await axios.post("/api/admin/category", { title: payload.title }, options)
-    console.log(response)
+    return response.data
+
+}
+
+const updateCounselor = async (payload) => {
+
+    const options = {
+        headers: {
+            authorization: `Bearer ${payload.token}`
+        }
+    }
+
+    const response = await axios.put("/api/admin/counselors/" + payload.crid, { status: payload.status }, options)
+    return response.data
+
+}
+
+const updateCredits = async (payload) => {
+
+    const options = {
+        headers: {
+            authorization: `Bearer ${payload.token}`
+        }
+    }
+
+    const response = await axios.put("/api/admin/credits/" + payload.rid, { status: payload.status }, options)
+    console.log(response.data)
     return response.data
 
 }
@@ -61,10 +84,14 @@ const addCategory = async (payload) => {
 
 
 
+
+
 const adminService = {
     fetchAdminOverview,
     updateUser,
-    addCategory
+    addCategory,
+    updateCounselor,
+    updateCredits
 }
 
 
