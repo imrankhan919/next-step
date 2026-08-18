@@ -6,7 +6,9 @@ const initialState = {
     categories: null,
     credits: null,
     counselors: null,
-    roadmaps: null
+    roadmaps: null,
+    messages: []
+
 }
 
 const adminSlice = createSlice({
@@ -42,10 +44,16 @@ const adminSlice = createSlice({
                 ...state,
                 credits: state.credits.map(credit => credit._id === action.payload._id ? action.payload : credit)
             }
+        },
+        setMessage: (state, action) => {
+            return {
+                ...state,
+                messages: [...state.messages, action.payload]
+            }
         }
     }
 });
 
-export const { setAdminData, setUpdateUser, setCategories, setApprovals, setCreditApprovals } = adminSlice.actions
+export const { setAdminData, setUpdateUser, setCategories, setApprovals, setCreditApprovals, setMessage } = adminSlice.actions
 
 export default adminSlice.reducer

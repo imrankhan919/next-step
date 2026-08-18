@@ -76,13 +76,25 @@ const updateCredits = async (payload) => {
     }
 
     const response = await axios.put("/api/admin/credits/" + payload.rid, { status: payload.status }, options)
-    console.log(response.data)
     return response.data
 
 }
 
 
+const askQuestion = async (payload) => {
 
+    const options = {
+        headers: {
+            authorization: `Bearer ${payload.token}`
+        }
+    }
+
+    const response = await axios.post("/api/admin/ai/", { question: payload.text }, options)
+    console.log(response.data)
+    return response.data
+
+
+}
 
 
 
@@ -91,7 +103,8 @@ const adminService = {
     updateUser,
     addCategory,
     updateCounselor,
-    updateCredits
+    updateCredits,
+    askQuestion
 }
 
 
