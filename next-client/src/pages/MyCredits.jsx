@@ -3,8 +3,13 @@ import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
+import { useSelector } from 'react-redux';
 
 export default function MyCredits() {
+
+  const { user } = useSelector(state => state.auth)
+
+
   const packs = [
     { name: 'Starter Pack', credits: '100 Credits', price: '₹299', perCredit: '₹2.99 / credit', popular: false, badge: 'STARTER' },
     { name: 'Student Value Pack', credits: '300 Credits', price: '₹699', perCredit: '₹2.33 / credit', popular: true, badge: 'MOST POPULAR 🔥' },
@@ -43,7 +48,7 @@ export default function MyCredits() {
 
               <div className="bg-parchment-card border-3 border-navy p-6 rounded-2xl shadow-pop text-center min-w-[220px]">
                 <div className="font-mono text-xs font-bold text-navy-muted uppercase">AVAILABLE BALANCE</div>
-                <div className="font-grotesk font-extrabold text-4xl text-rust mt-1">120 <span className="text-base text-navy">pts</span></div>
+                <div className="font-grotesk font-extrabold text-4xl text-rust mt-1">{user.credits} <span className="text-base text-navy">pts</span></div>
                 <StatusBadge text="ACTIVE WALLET" status="success" />
               </div>
             </div>

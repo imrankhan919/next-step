@@ -90,7 +90,6 @@ const askQuestion = async (payload) => {
     }
 
     const response = await axios.post("/api/admin/ai/", { question: payload.text }, options)
-    console.log(response.data)
     return response.data
 
 

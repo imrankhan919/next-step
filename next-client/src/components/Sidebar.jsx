@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export default function Sidebar({ activeTab = 'overview', role = 'student' }) {
   const studentNav = [
     { id: 'overview', label: 'My Dashboard', link: "/auth/profile", icon: '📊' },
-    { id: 'roadmap', label: 'AI Roadmap', link: "/auth/profile/my-roadmaps", icon: '⚡' },
+    { id: 'roadmap', label: 'My Roadmaps', link: "/auth/profile/my-roadmaps", icon: '⚡' },
     { id: 'messages', label: 'Messages & Chat', link: "/auth/profile/chat", icon: '💬' },
     { id: 'credits', label: 'My Credits & Wallet', link: "/auth/profile/my-credits", icon: '🪙' },
     { id: 'become_counselor', label: 'Join as Counselor', link: "/auth/profile/become-counselor", icon: '🎓' },

@@ -7,6 +7,6 @@ const router = express.Router()
 
 router.post("/", protect.forUser, counselorController.becomeCounselor)
 router.get("/", counselorController.getActiveCounselors)
-
+router.get("/categories", counselorController.getCategories)
 
 export default router

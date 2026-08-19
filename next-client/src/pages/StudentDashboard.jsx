@@ -4,7 +4,7 @@ import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
 import { useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 
 export default function StudentDashboard() {
@@ -58,6 +58,8 @@ export default function StudentDashboard() {
   useEffect(() => {
     if (user.userType === "ADMIN") {
       navigate("/auth/admin")
+    } else if (user.userType === "COUNSELOR") {
+      navigate("/auth/counselor")
     }
   }, [user])
 
@@ -74,23 +76,21 @@ export default function StudentDashboard() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
               <div>
                 <div className="inline-block bg-navy text-yellow font-mono text-[10px] font-bold px-3 py-1 rounded-full uppercase mb-2">
-                  Student Workspace • Aarav Sharma
+                  Student Workspace • {user.name}
                 </div>
                 <h1 className="font-grotesk font-extrabold text-3xl text-navy">
-                  Namaste, Aarav! Ready to level up? ⚡
+                  Namaste, {user.name}! Ready to level up? ⚡
                 </h1>
                 <p className="font-body text-sm text-navy-muted mt-1">
-                  You have <span className="font-bold text-navy">120 Credits</span> available. Your target role is <span className="font-bold text-rust">Full-Stack Engineer</span>.
+                  You have <span className="font-bold text-navy">{user.credits} Credits</span> available. Your current level is <span className="font-bold text-rust">{user.qualification}</span>.
                 </p>
               </div>
 
               <div className="flex items-center space-x-3">
-                <Button variant="accent" size="md">
-                  + Generate AI Roadmap
-                </Button>
-                <Button variant="sky" size="md">
-                  Book Counselor
-                </Button>
+                <Link to={"/auth/ai-roadmap"} className="font-grotesk border border-black tracking-wide rounded-full transition-all active:translate-x-1 active:translate-y-1 active:shadow-none px-5 py-2.5 text-sm font-extrabold bg-yellow text-navy hover:bg-yellow-fixed border-3 border-navy shadow-pop">
+                  + Generate Roadmap
+                </Link>
+
               </div>
             </div>
           </div>

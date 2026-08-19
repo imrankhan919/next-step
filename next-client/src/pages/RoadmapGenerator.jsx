@@ -3,8 +3,69 @@ import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
+import { useEffect, useState } from 'react';
+import { useSelector } from 'react-redux';
+import { useMutation } from '@tanstack/react-query';
+import roadmapService from '../services/roadmapService';
+import LoadingScreen from '../components/LoadingScreen';
+import { useNavigate } from 'react-router-dom';
+import toast from 'react-hot-toast';
 
 export default function RoadmapGenerator() {
+
+  const navigate = useNavigate()
+
+
+  const { user } = useSelector(state => state.auth)
+
+  const { mutate, data, isPending, isSuccess, isError, error } = useMutation({ mutationFn: (credentials) => roadmapService.generateRoadmap(credentials) })
+
+  const [formData, setFormData] = useState({
+    interest: "",
+    skill_level: "beginner",
+    budget: "",
+    learning_mode: "",
+    additional_info: ""
+  })
+
+  const { interest, skill_level, budget, learning_mode, additional_info } = formData
+
+  const handleChange = (e) => {
+    setFormData({
+      ...formData,
+      [e.target.name]: e.target.value
+    })
+  }
+
+
+  const handleSubmit = (e) => {
+    e.preventDefault()
+    mutate({
+      token: user.token,
+      ...formData
+    })
+  }
+
+
+  useEffect(() => {
+
+    if (isSuccess && data) {
+      navigate("/auth/profile/my-roadmaps")
+    }
+
+    if (isError && error) {
+      toast.error(error?.response.data.message)
+    }
+
+  }, [isError, error, data, isSuccess])
+
+
+  if (isPending) {
+    return (
+      <LoadingScreen loadingMessage='Generating Roadmap....' />
+    )
+  }
+
   return (
     <div className="min-h-screen bg-parchment flex flex-col">
       <Navbar activePage="roadmap" />
@@ -34,7 +95,7 @@ export default function RoadmapGenerator() {
                   10 Credits / Generation
                 </div>
 
-                <form className="space-y-6">
+                <form onSubmit={handleSubmit} className="space-y-6">
                   {/* Step 1: Target Role */}
                   <div>
                     <label className="block font-grotesk font-extrabold text-sm uppercase tracking-wider text-navy mb-2">
@@ -42,8 +103,25 @@ export default function RoadmapGenerator() {
                     </label>
                     <input
                       type="text"
-                      defaultValue="Full-Stack Web Engineer (MERN + Next.js)"
+                      defaultValue=""
+                      value={interest}
+                      name='interest'
+                      onChange={handleChange}
                       placeholder="e.g. Data Scientist, IAS Officer, Product Manager..."
+                      className="w-full bg-parchment border-3 border-navy rounded-xl px-4 py-3 font-body text-sm text-navy shadow-pop-sm focus:outline-none"
+                    />
+                  </div>
+                  <div>
+                    <label className="block font-grotesk font-extrabold text-sm uppercase tracking-wider text-navy mb-2">
+                      Budget
+                    </label>
+                    <input
+                      type="number"
+                      defaultValue=""
+                      value={budget}
+                      name='budget'
+                      onChange={handleChange}
+                      placeholder="5000 INR"
                       className="w-full bg-parchment border-3 border-navy rounded-xl px-4 py-3 font-body text-sm text-navy shadow-pop-sm focus:outline-none"
                     />
                   </div>
@@ -54,54 +132,40 @@ export default function RoadmapGenerator() {
                       <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-2">
                         2. Current Knowledge Level
                       </label>
-                      <select className="w-full bg-parchment border-3 border-navy rounded-xl px-3 py-2.5 font-body text-sm text-navy shadow-pop-sm focus:outline-none">
-                        <option>Beginner (No coding background)</option>
-                        <option selected>Intermediate (Know basic HTML/JS)</option>
-                        <option>Advanced (Building full projects)</option>
+                      <select
+                        value={skill_level}
+                        name='skill_level'
+                        onChange={handleChange} className="w-full bg-parchment border-3 border-navy rounded-xl px-3 py-2.5 font-body text-sm text-navy shadow-pop-sm focus:outline-none">
+                        <option selected value={"beginner"}>Beginner </option>
+                        <option value={"intermediate"}>Intermediate </option>
+                        <option value={"advanced"}>Advanced</option>
                       </select>
                     </div>
 
                     <div>
                       <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-2">
-                        3. Weekly Commitment
+                        3. Learning Mode
                       </label>
-                      <select className="w-full bg-parchment border-3 border-navy rounded-xl px-3 py-2.5 font-body text-sm text-navy shadow-pop-sm focus:outline-none">
-                        <option>5 - 10 Hours / week</option>
-                        <option selected>15 - 20 Hours / week</option>
-                        <option>30+ Hours (Full-time Prep)</option>
+                      <select value={learning_mode}
+                        name='learning_mode'
+                        onChange={handleChange} className="w-full bg-parchment border-3 border-navy rounded-xl px-3 py-2.5 font-body text-sm text-navy shadow-pop-sm focus:outline-none">
+                        <option value={'offline'}>Offline</option>
+                        <option value={'online'}>Online</option>
+                        <option value={'hybrid'}>Hybrid</option>
                       </select>
                     </div>
                   </div>
-
-                  {/* Step 3: Target Salary Expectation */}
-                  <div>
-                    <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-2">
-                      4. Desired Starting Package Goal (INR)
-                    </label>
-                    <div className="grid grid-cols-3 gap-3">
-                      <label className="p-3 bg-parchment border-2 border-navy rounded-xl flex items-center space-x-2 cursor-pointer font-mono text-xs text-navy font-bold shadow-pop-sm">
-                        <input type="radio" name="salary" className="text-yellow" />
-                        <span>₹4L - ₹8L/yr</span>
-                      </label>
-                      <label className="p-3 bg-yellow border-2 border-navy rounded-xl flex items-center space-x-2 cursor-pointer font-mono text-xs text-navy font-bold shadow-pop-sm">
-                        <input type="radio" name="salary" defaultChecked className="text-navy" />
-                        <span>₹8L - ₹15L/yr</span>
-                      </label>
-                      <label className="p-3 bg-parchment border-2 border-navy rounded-xl flex items-center space-x-2 cursor-pointer font-mono text-xs text-navy font-bold shadow-pop-sm">
-                        <input type="radio" name="salary" className="text-yellow" />
-                        <span>₹15L+/yr</span>
-                      </label>
-                    </div>
-                  </div>
-
                   {/* Step 4: Special Instructions */}
                   <div>
                     <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-2">
                       5. Specific Goal / Background Notes
                     </label>
                     <textarea
+                      value={additional_info}
+                      name='additional_info'
+                      onChange={handleChange}
                       rows={3}
-                      defaultValue="I am a 3rd year BCA student in Delhi. I want a roadmap tailored to crack tier-1 product startup campus placements within 6 months."
+                      defaultValue=""
                       placeholder="Share your specific constraints..."
                       className="w-full bg-parchment border-3 border-navy rounded-xl p-4 font-body text-sm text-navy shadow-pop-sm focus:outline-none"
                     ></textarea>
@@ -109,9 +173,9 @@ export default function RoadmapGenerator() {
 
                   <div className="pt-4 border-t-2 border-navy/20 flex items-center justify-between">
                     <div className="font-mono text-xs text-navy-muted font-bold">
-                      Cost: <span className="text-rust">10 Credits</span> (Balance: 120)
+                      Cost: <span className="text-rust">10 Credits</span> (Balance: {user.credits})
                     </div>
-                    <Button variant="primary" size="lg">
+                    <Button type='submit' variant="primary" size="lg">
                       ⚡ GENERATE AI ROADMAP NOW →
                     </Button>
                   </div>

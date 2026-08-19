@@ -3,8 +3,13 @@ import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
+import { useSelector } from 'react-redux';
 
 export default function CounselorDashboard() {
+
+  const { user } = useSelector(state => state.auth)
+
+
   const pendingRequests = [
     { id: 'req-1', student: 'Aarav Sharma', college: 'IIT Delhi (B.Tech CSE)', topic: 'System Design Mock Interview', time: 'Tomorrow, 5:00 PM IST', fee: '50 Credits' },
     { id: 'req-2', student: 'Priya Patel', college: 'NSUT Delhi (BCA)', topic: 'Resume & Portfolio Feedback', time: 'Sat, 11:00 AM IST', fee: '50 Credits' },
@@ -23,14 +28,11 @@ export default function CounselorDashboard() {
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
               <div>
                 <div className="inline-block bg-navy text-yellow font-mono text-[10px] font-bold px-3 py-1 rounded-full uppercase mb-2">
-                  Counselor Portal • Dr. Ramesh Kumar
+                  Counselor Portal • {user.name}
                 </div>
                 <h1 className="font-grotesk font-extrabold text-3xl text-navy">
-                  Welcome back, Dr. Ramesh! 🎓
+                  Welcome back,{user.name} 🎓
                 </h1>
-                <p className="font-body text-sm text-navy-muted mt-1">
-                  You have <span className="font-bold text-navy">2 pending session requests</span> and <span className="font-bold text-rust">₹34,500</span> in monthly payouts.
-                </p>
               </div>
 
               <div className="flex items-center space-x-3">

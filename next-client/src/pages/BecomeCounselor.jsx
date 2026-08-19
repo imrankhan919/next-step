@@ -3,8 +3,30 @@ import Sidebar from '../components/Sidebar';
 import Card from '../components/Card';
 import Button from '../components/Button';
 import StatusBadge from '../components/StatusBadge';
+import { useSelector } from 'react-redux';
+import { useQuery } from '@tanstack/react-query';
+import authService from '../services/authService';
+import LoadingScreen from '../components/LoadingScreen';
+import CounselorApplicationForm from '../components/CounselorApplicationForm';
 
 export default function BecomeCounselor() {
+
+  const { user } = useSelector(state => state.auth)
+
+  const { data, isLoading, isSuccess, isError, error } = useQuery({ queryKey: ["category"], queryFn: () => authService.fetchQueries() })
+
+
+
+
+
+
+
+  if (isLoading) {
+    return (
+      <LoadingScreen loadingMessage='Fetching Categories...' />
+    )
+  }
+
   return (
     <div className="min-h-screen bg-parchment flex flex-col">
       <Navbar activePage="counselors" />
@@ -35,98 +57,7 @@ export default function BecomeCounselor() {
                   <h2 className="font-grotesk font-extrabold text-xl text-navy mt-2">Counselor Onboarding Application</h2>
                 </div>
 
-                <form className="space-y-4">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-1">
-                        Full Name & Title
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="Vikramaditya Singh"
-                        placeholder="e.g. Vikramaditya Singh"
-                        className="w-full bg-parchment border-3 border-navy rounded-xl px-4 py-2.5 font-body text-sm text-navy shadow-pop-sm focus:outline-none"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-1">
-                        Current Company / Designation
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="Staff Engineer @ Google India"
-                        placeholder="e.g. Lead Designer @ Swiggy"
-                        className="w-full bg-parchment border-3 border-navy rounded-xl px-4 py-2.5 font-body text-sm text-navy shadow-pop-sm focus:outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-1">
-                        LinkedIn Profile URL
-                      </label>
-                      <input
-                        type="text"
-                        defaultValue="https://linkedin.com/in/vikramaditya-singh"
-                        placeholder="https://linkedin.com/in/username"
-                        className="w-full bg-parchment border-3 border-navy rounded-xl px-4 py-2.5 font-body text-sm text-navy shadow-pop-sm focus:outline-none"
-                      />
-                    </div>
-
-                    <div>
-                      <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-1">
-                        Years of Industry Experience
-                      </label>
-                      <select className="w-full bg-parchment border-3 border-navy rounded-xl px-3 py-2.5 font-body text-sm text-navy shadow-pop-sm focus:outline-none">
-                        <option>3 - 5 Years</option>
-                        <option selected>6 - 10 Years</option>
-                        <option>10+ Years</option>
-                      </select>
-                    </div>
-                  </div>
-
-                  <div>
-                    <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-1">
-                      Primary Domain Expertise
-                    </label>
-                    <select className="w-full bg-parchment border-3 border-navy rounded-xl px-3 py-2.5 font-body text-sm text-navy shadow-pop-sm focus:outline-none">
-                      <option selected>Software Engineering & Cloud</option>
-                      <option>Data Science & AI</option>
-                      <option>UI/UX Product Design</option>
-                      <option>UPSC & Civil Services</option>
-                      <option>MBA & Career Transitions</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block font-grotesk font-bold text-xs uppercase text-navy mb-1">
-                      Brief Bio & Mentorship Philosophy
-                    </label>
-                    <textarea
-                      rows={3}
-                      defaultValue="Passionate about guiding students from Tier-2 & Tier-3 Indian colleges to clear technical interviews at top tier-1 product companies."
-                      placeholder="Share your experience..."
-                      className="w-full bg-parchment border-3 border-navy rounded-xl p-3 font-body text-sm text-navy shadow-pop-sm focus:outline-none"
-                    ></textarea>
-                  </div>
-
-                  {/* Document Upload Mock */}
-                  <div className="bg-sky/20 border-2 border-dashed border-navy p-4 rounded-xl text-center">
-                    <div className="font-grotesk font-bold text-xs text-navy">📄 Upload Verification Document (ID / Work Email)</div>
-                    <div className="font-mono text-[10px] text-navy-muted mt-1">PDF or PNG file up to 10MB (Mock Upload)</div>
-                    <button type="button" className="mt-2 px-3 py-1 bg-white border border-navy rounded-lg font-mono text-xs font-bold text-navy shadow-pop-sm">
-                      Select File
-                    </button>
-                  </div>
-
-                  <div className="pt-4 border-t-2 border-navy/20">
-                    <Button variant="accent" size="lg" className="w-full">
-                      SUBMIT COUNSELOR APPLICATION →
-                    </Button>
-                  </div>
-                </form>
+                <CounselorApplicationForm categories={data} />
               </div>
             </div>
 

@@ -5,41 +5,42 @@ import Category from "../models/categoryModel.js";
 import Rating from "../models/ratingModel.js";
 import Credit from "../models/creditModel.js";
 import Counselor from "../models/counselorModel.js";
+import Roadmap from "../models/roadmapModel.js";
 
 
 
 
 export const generateRoadmap = async (req, res) => {
 
-    try {
-        const ai = new GoogleGenAI({});
+  try {
+    const ai = new GoogleGenAI({});
 
-        const user = await User.findById(req.user.id)
+    const user = await User.findById(req.user.id)
 
-        if (!user) {
-            res.status(404)
-            throw new Error("User Not Found!")
-        }
+    if (!user) {
+      res.status(404)
+      throw new Error("User Not Found!")
+    }
 
-        if (user.credits < 1) {
-            res.status(401)
-            throw new Error("Inssufficeint Credits!")
-        }
+    if (user.credits < 1) {
+      res.status(401)
+      throw new Error("Inssufficeint Credits!")
+    }
 
-        let updatedUser = await User.findByIdAndUpdate(user._id, { credits: user.credits - 1 }, { new: true })
-
-
-        const { name, email, qualification, location } = user
-        const { interest, skill_level, budget, learning_mode } = req.body
-
-        if (!interest || !skill_level || !budget || !learning_mode) {
-            res.status(409)
-            throw new Error("Please Fill All Details!")
-        }
+    let updatedUser = await User.findByIdAndUpdate(user._id, { credits: user.credits - 1 }, { new: true })
 
 
+    const { name, email, qualification, location } = user
+    const { interest, skill_level, budget, learning_mode, additional_info } = req.body
 
-        const SYSTEM_PROPMT = `You are "CareerPath AI" — an expert career counselor and curriculum advisor 
+    if (!interest || !skill_level || !budget || !learning_mode) {
+      res.status(409)
+      throw new Error("Please Fill All Details!")
+    }
+
+
+
+    const SYSTEM_PROPMT = `You are "CareerPath AI" — an expert career counselor and curriculum advisor 
 specializing in the Indian subcontinent education and job market (India, 
 Pakistan, Bangladesh, Nepal, Sri Lanka). You help students go from their 
 current qualification to a clear, actionable career path in their field 
@@ -65,6 +66,7 @@ skill_level : ${skill_level}
 budget : ${budget}
 learning_mode : ${learning_mode}
 location : ${location}
+additional : ${additional_info}
 
 ---
 
@@ -165,67 +167,73 @@ account on X and complete the first module").
   Phase" at the start of the learning path addressing the transition.`
 
 
-        const interaction = await ai.interactions.create({
-            model: "gemini-3.5-flash",
-            input: SYSTEM_PROPMT,
-        });
+    const interaction = await ai.interactions.create({
+      model: "gemini-3.5-flash",
+      input: SYSTEM_PROPMT,
+    });
 
-        let data = interaction.output_text
+    let data = interaction.output_text
 
-        res.status(200).json({
-            message: "Roadmap generated",
-            roadmap: data
-        })
+    const roadmap = await Roadmap.create({
+      text: data,
+      user: user._id
+    })
 
-    } catch (error) {
-        res.status(409)
-        throw new Error("Unable to generate roadmap insufficeint credits")
-    }
+
+    res.status(200).json({
+      message: "Roadmap generated",
+      roadmap: roadmap
+    })
+
+  } catch (error) {
+    res.status(409)
+    throw new Error(error.message)
+  }
 
 }
 
 
 export const adminAiChat = async (req, res) => {
 
-    try {
+  try {
 
-        const { question } = req.body
+    const { question } = req.body
 
-        if (!question) {
-            res.status(409)
-            throw new Error("Question Not Found!")
-        }
-
-        const users = await User.find()
-        const careers = await Career.find()
-        const categories = await Category.find()
-        const ratings = await Rating.find()
-        const credit = await Credit.find()
-        const counselor = await Counselor.find()
-
-        const dataset = [users, careers, categories, ratings, credit, counselor]
-
-
-        const SYSTEM_PROMPT = `You are smart ai assistant which replies to my questions about given dataset else you respond with no data available. here is data set you need to answer according to that  : ${dataset} and here is my question : ${question}`
-
-
-        const ai = new GoogleGenAI({});
-        const interaction = await ai.interactions.create({
-            model: "gemini-3.5-flash",
-            input: SYSTEM_PROMPT,
-        });
-
-        let data = interaction.output_text
-
-        res.status(200).json({
-            message: "Response Arrived",
-            answer: data
-        })
-
-    } catch (error) {
-        console.log(error)
-        res.status(409)
-        throw new Error("Unable to response")
+    if (!question) {
+      res.status(409)
+      throw new Error("Question Not Found!")
     }
+
+    const users = await User.find()
+    const careers = await Career.find()
+    const categories = await Category.find()
+    const ratings = await Rating.find()
+    const credit = await Credit.find()
+    const counselor = await Counselor.find()
+
+    const dataset = [users, careers, categories, ratings, credit, counselor]
+
+
+    const SYSTEM_PROMPT = `You are smart ai assistant which replies to my questions about given dataset else you respond with no data available. here is data set you need to answer according to that  : ${dataset} and here is my question : ${question}`
+
+
+    const ai = new GoogleGenAI({});
+    const interaction = await ai.interactions.create({
+      model: "gemini-3.5-flash",
+      input: SYSTEM_PROMPT,
+    });
+
+    let data = interaction.output_text
+
+    res.status(200).json({
+      message: "Response Arrived",
+      answer: data
+    })
+
+  } catch (error) {
+    console.log(error)
+    res.status(409)
+    throw new Error("Unable to response")
+  }
 
 }
